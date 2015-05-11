@@ -1,5 +1,6 @@
 <%= javascript_tag do %>
 	window.definedWidgets = JSON.parse('<%= raw @defined_widgets.to_json %>');
+  window.uiJSON = JSON.parse('<%= raw @rig.ui_json %>');
 <% end %>
 
 <div>
@@ -120,26 +121,63 @@
       accept: '.defined-widget',
       drop: function(event, ui) {
         var widgetType = ui.draggable.attr('id');
-        addWidgetToCanvas(widgetType)
+        addWidgetToCanvas(widgetType, widgetNextIndex);
+        widgetNextIndex++;
       }
     });
 
-    function addWidgetToCanvas(widgetType) {
+    rebuildWidgetsFromJson();
+
+    $('#save-ui').on('click', function() {
+      $('#rig_ui_json').val(JSON.stringify(gridster.serialize()));
+      $('form.edit_rig').submit();
+
+    });
+
+
+    // FUNCTIONS
+
+    function rebuildWidgetsFromJson() {
+      if (window.uiJSON.length > 0) {
+
+
+        $.each(window.uiJSON, function() {
+          // gridster.add_widget('<li />', this.size_x, this.size_y, this.col, this.row);
+          console.log(this)
+          addWidgetToCanvas(this.type, this.id, this.size_x, this.size_y, this.col, this.row, this.settings);
+        });
+      }
+    }
+
+    function addWidgetToCanvas(widgetType, index, size_x, size_y, col, row, settings) {
       // create and add the widget to the canvas
-      gridster.add_widget(
-        '<li class="widget-in" id="' + widgetNextIndex + '" data-type="' + widgetType + '">' +
-          '<a class="btn btn-danger pull-right delete-widget">Delete</a>' +
-          '<a class="btn btn-default pull-right setting-widget">Settings</a>' +
-          '<img src="' + window.definedWidgets[widgetType].image + '"/>' +
-        '</li>');
+
+
+      if (typeof size_x == 'undefined') {
+        gridster.add_widget(
+          '<li class="widget-in" id="' + index + '" data-type="' + widgetType + '">' +
+            '<a class="btn btn-danger pull-right delete-widget">Delete</a>' +
+            '<a class="btn btn-default pull-right setting-widget">Settings</a>' +
+            '<img src="' + window.definedWidgets[widgetType].image + '"/>' +
+          '</li>');
+      } else {
+        gridster.add_widget(
+          '<li class="widget-in" id="' + index + '" data-type="' + widgetType + '">' +
+            '<a class="btn btn-danger pull-right delete-widget">Delete</a>' +
+            '<a class="btn btn-default pull-right setting-widget">Settings</a>' +
+            '<img src="' + window.definedWidgets[widgetType].image + '"/>' +
+          '</li>', size_x, size_y, col, row);
+
+        $('.widget-in#' + index).data('settings', settings);
+      }
 
       // bind delete buttons
-      $('.widget-in#' + widgetNextIndex + ' .delete-widget').on('click', function() {
+      $('.widget-in#' + index + ' .delete-widget').on('click', function() {
         gridster.remove_widget($(this).parent());
       })
 
       // bind settings buttons
-      $('.widget-in#' + widgetNextIndex + ' .setting-widget').on('click', function() {
+      $('.widget-in#' + index + ' .setting-widget').on('click', function() {
         // setup the modal form fields and buttons
         $('.modal-body form').hide();
         $('#' + window.definedWidgets[widgetType].form).show();
@@ -176,15 +214,7 @@
         // show modal
         $('#settings-modal').modal();
       })
-
-      widgetNextIndex++;
     }
-
-    $('#save-ui').on('click', function() {
-      $('#rig_ui_json').val(JSON.stringify(gridster.serialize()));
-      $('form.edit_rig').submit();
-
-    })
 
   });
 
