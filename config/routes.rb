@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   get 'rigs/:id/get_form/:type', :to => 'rigs#get_form', :as => 'ui_designer_get_form'
 
+  get 'r/:id', :to => 'rigs#r_session', :as => 'rig_session'
+
   root to: 'visitors#index'
   devise_for :users
   resources :users

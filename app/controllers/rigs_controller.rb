@@ -1,6 +1,7 @@
 class RigsController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_rig, only: [:show, :edit, :update, :destroy, :ui_designer]
+  before_action :set_rig, only: [:show, :edit, :update, :destroy, :ui_designer, :r_session]
+  before_action :defined_widgets, only: [:ui_designer, :r_session]
 
   respond_to :html
 
@@ -23,15 +24,12 @@ class RigsController < ApplicationController
 
   def ui_designer
     @slave_modules = @rig.slave_modules
-
-    @defined_widgets = {
-      "line-chart"=> {title: 'Line chart', image: '/widgets/line-chart.png', form: 'chart-form'},
-      "bar-chart"=> {title: 'Bar chart', image: '/widgets/bar-chart.png', form: 'chart-form'},
-      "switch"=> {title: 'Switch', image: '/widgets/switch.png', form: 'switch-form'}
-    }
-
     @switchable_slaves = @rig.slave_modules.where(s_type: 0)
     @chartable_slaves = @rig.slave_modules.where.not(s_type: 0)
+  end
+
+  def r_session
+
   end
 
   def create
@@ -57,5 +55,13 @@ class RigsController < ApplicationController
 
     def rig_params
       params.require(:rig).permit(:title, :rig_type, :description, :pdf_file, :ui_json)
+    end
+
+    def defined_widgets
+      @defined_widgets = {
+        "line-chart"=> {title: 'Line chart', image: '/widgets/line-chart.png', form: 'chart-form'},
+        "bar-chart"=> {title: 'Bar chart', image: '/widgets/bar-chart.png', form: 'chart-form'},
+        "switch"=> {title: 'Switch', image: '/widgets/switch.png', form: 'switch-form'}
+      }
     end
 end
