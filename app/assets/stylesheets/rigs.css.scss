@@ -75,8 +75,13 @@ body {
     font-weight: bold;
     text-align: center;
     line-height: 100%;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
 }
 
+.unconfigured {
+  border: 1px solid #FF4136 !important;
+}
 
 .gridster {
     margin: 0 auto;

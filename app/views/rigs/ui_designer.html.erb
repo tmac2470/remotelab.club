@@ -98,7 +98,7 @@
 
     var gridster = $(".gridster ul").gridster({
       widget_margins: [10, 10],
-      widget_base_dimensions: [250, 155],
+      widget_base_dimensions: [250, 165],
       resize: {enabled: true},
       serialize_params: function ($w, wgd) {
         return {
@@ -128,10 +128,16 @@
 
     rebuildWidgetsFromJson();
 
+    // bind the save button
     $('#save-ui').on('click', function() {
-      $('#rig_ui_json').val(JSON.stringify(gridster.serialize()));
-      $('form.edit_rig').submit();
-
+      // check that all the widgets have been configured
+      if ($(".widget-in.unconfigured").length > 0) {
+        alert('You must configure all widgets before saving.');
+      } else {
+      // generate the json string and submit the form
+        $('#rig_ui_json').val(JSON.stringify(gridster.serialize()));
+        $('form.edit_rig').submit();
+      }
     });
 
 
@@ -139,20 +145,19 @@
 
     function rebuildWidgetsFromJson() {
       if (window.uiJSON.length > 0) {
-
-
         $.each(window.uiJSON, function() {
           // gridster.add_widget('<li />', this.size_x, this.size_y, this.col, this.row);
           console.log(this)
           addWidgetToCanvas(this.type, this.id, this.size_x, this.size_y, this.col, this.row, this.settings);
         });
+
+        // adjust the next indea for extra widgets
+        widgetNextIndex = $('.widget-in').length;
       }
     }
 
     function addWidgetToCanvas(widgetType, index, size_x, size_y, col, row, settings) {
       // create and add the widget to the canvas
-
-
       if (typeof size_x == 'undefined') {
         gridster.add_widget(
           '<li class="widget-in" id="' + index + '" data-type="' + widgetType + '">' +
@@ -160,6 +165,8 @@
             '<a class="btn btn-default pull-right setting-widget">Settings</a>' +
             '<img src="' + window.definedWidgets[widgetType].image + '"/>' +
           '</li>');
+
+        $('.widget-in#' + index).addClass('unconfigured');
       } else {
         gridster.add_widget(
           '<li class="widget-in" id="' + index + '" data-type="' + widgetType + '">' +
@@ -201,8 +208,8 @@
           var thisForm = $('#' + window.definedWidgets[widgetType].form);
 
           var formData = thisForm.serializeArray();
-
           $('.widget-in#' + thisId).data('settings', formData);
+          $('.widget-in#' + thisId).removeClass('unconfigured');
 
           // reset the form
           document.getElementById(window.definedWidgets[widgetType].form).reset();
