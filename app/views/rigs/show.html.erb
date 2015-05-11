@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @rig.title %>
+</p>
+
+<p>
+  <strong>Rig type:</strong>
+  <%= @rig.rig_type %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @rig.user_id %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @rig.description %>
+</p>
+
+<p>
+  <strong>Pdf file:</strong>
+  <%= @rig.pdf_file %>
+</p>
+
+<%= link_to 'Edit', edit_rig_path(@rig) %> |
+<%= link_to 'Back', rigs_path %>

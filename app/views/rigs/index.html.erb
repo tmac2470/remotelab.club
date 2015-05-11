@@ -1,0 +1,33 @@
+<h1>Listing rigs</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Rig type</th>
+      <th>User</th>
+      <th>Description</th>
+      <th>Pdf file</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @rigs.each do |rig| %>
+      <tr>
+        <td><%= rig.title %></td>
+        <td><%= rig.rig_type %></td>
+        <td><%= rig.user_id %></td>
+        <td><%= rig.description %></td>
+        <td><%= rig.pdf_file %></td>
+        <td><%= link_to 'Show', rig %></td>
+        <td><%= link_to 'Edit', edit_rig_path(rig) %></td>
+        <td><%= link_to 'Destroy', rig, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Rig', new_rig_path %>

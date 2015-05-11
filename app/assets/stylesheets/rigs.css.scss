@@ -1,0 +1,106 @@
+// Place all the styles related to the rigs controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+
+#side-bar {
+}
+
+  .defined-widget {
+    width: 80%;
+    max-height: 125px;
+    z-index: 1000;
+  }
+
+  .widget-details {
+
+  }
+
+#canvas {
+  min-height: 800px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  background-color: #EFEFEF;
+}
+  #canvas-help-text {
+    display: block;
+    margin: auto;
+  }
+
+  .widget-in {
+    list-style: none;
+  }
+
+    .widget-in img {
+      width: 100%;
+    }
+
+.gridster * {
+  margin:0;
+  padding:0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+
+/*/
+/* demo
+/*/
+
+
+body {
+    font-size: 16px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #444;
+    margin: 30px 40px;
+}
+
+.controls {
+    margin-bottom: 20px;
+}
+
+/*/
+/* gridster
+/*/
+
+.gridster ul {
+    background-color: #EFEFEF;
+}
+
+.gridster li {
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 100%;
+}
+
+
+.gridster {
+    margin: 0 auto;
+
+    opacity: .8;
+
+    -webkit-transition: opacity .6s;
+    -moz-transition: opacity .6s;
+    -o-transition: opacity .6s;
+    -ms-transition: opacity .6s;
+    transition: opacity .6s;
+}
+
+.gridster .gs-w {
+    background: #DDD;
+    cursor: pointer;
+}
+
+.gridster .player {
+    background: #BBB;
+}
+
+
+.gridster .preview-holder {
+    border: none!important;
+    background: red!important;
+}
