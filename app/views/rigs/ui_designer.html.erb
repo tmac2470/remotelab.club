@@ -60,6 +60,13 @@
             <% end %>
           </select>
 
+          <label for="pin">Switch Port</label>
+          <select name="pin" class="form-control">
+            <% (3..13).to_a.each do |i| %>
+              <option value="<%= i %>"><%= "Port #{i}" %></option>
+            <% end %>
+          </select>
+
           <label for="name">Name</label>
           <input name="name" class="form-control"></input>
         </form>

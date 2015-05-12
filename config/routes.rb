@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get 'r/:id', :to => 'rigs#r_session', :as => 'rig_session'
 
+  post 'mqtt', :to => 'rigs#mqtt_publish', :as => 'mqtt_publish'
+
   root to: 'visitors#index'
   devise_for :users
   resources :users

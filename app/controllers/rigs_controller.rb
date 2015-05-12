@@ -1,3 +1,4 @@
+require 'mqtt'
 class RigsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_rig, only: [:show, :edit, :update, :destroy, :ui_designer, :r_session]
@@ -30,6 +31,22 @@ class RigsController < ApplicationController
 
   def r_session
     @ui_json = JSON.parse(@rig.ui_json)
+  end
+
+  def mqtt_publish
+
+    rig_hash = params[:rig_hash]
+    slave_address = params[:s_address]
+    command = params[:s_command]
+    message = params[:s_value]
+
+    topic = "rigs/#{rig_hash}/slaves/#{slave_address}/#{command}"
+
+    MQTT::Client.connect('localhost') do |c|
+      c.publish(topic, message)
+    end
+
+    render :text => 'Done'
   end
 
   def create

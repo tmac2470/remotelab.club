@@ -1,22 +1,24 @@
 require 'json'
 class SlaveHelper
 
-  def self.execute_command(rig_hash, slave_address, command, args)
+  def self.execute_command(rig_hash, json_data)
     p rig_hash
-    p slave_address
-    p command
-    p args
+    p json_data
 
-    rig = Rig.first
+    rig = Rig.find_by(rig_hash: rig_hash)
 
-    if command == 'register'
-      register(rig, slave_address, args.to_i)
-    elsif command == 'remove'
-      remove(rig, slave_address)
-    elsif command == 'logData'
-      log_data(rig, slave_address, args)
+    if rig
+      case json_data['command'].to_i
+      when 0 # register slave
+        register(rig, json_data['address'].to_i, json_data['value'].to_i)
+      when 1 # deregister slave
+        remove(rig, json_data['address'].to_i)
+      when 2 # log data
+        log_data(rig, json_data['address'].to_i, json_data['value'])
+      else
+        p 'Invalid command.'
+      end
     end
-
   end
 
   private
