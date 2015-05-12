@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/njh/ruby-mqtt.git
+  revision: 582f28dc19521e288a7fdb8f94909ecb83e3ec4a
+  specs:
+    mqtt (0.4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -248,6 +254,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   launchy
+  mqtt!
   parsley-rails
   pg
   pry-rails

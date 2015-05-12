@@ -25,6 +25,9 @@ gem 'em-websocket'
 gem 'jquery-ui-rails'
 gem 'chart-js-rails'
 
+# MQTT
+gem 'mqtt', :git => 'https://github.com/njh/ruby-mqtt.git'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_21]
