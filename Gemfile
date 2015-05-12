@@ -23,6 +23,7 @@ gem 'therubyracer'
 gem 'em-websocket'
 
 gem 'jquery-ui-rails'
+gem 'chart-js-rails'
 
 group :development do
   gem 'better_errors'

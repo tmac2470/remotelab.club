@@ -1,0 +1,16 @@
+<li class="switch-widget" id="<%= widget['id'] %>" data-row="<%= widget['row'] %>" data-col="<%= widget['col'] %>" data-sizex="<%= widget['size_x'] %>" data-sizey="<%= widget['size_y'] %>">
+  <img class="switch" data-on="true" src="/widgets/ui/switch_on.png" />
+  <h4><%= widget['settings'].select{|s| s['name'] == 'name'}.first['value'] %></h4>
+</li>
+
+<script>
+  $('.switch-widget#<%= widget['id'] %> .switch').on('click', function() {
+    if ($(this).data('on') == true) {
+      $(this).attr('src', '/widgets/ui/switch_off.png');
+      $(this).data('on', false);
+    } else {
+      $(this).attr('src', '/widgets/ui/switch_on.png')
+      $(this).data('on', true);
+    }
+  });
+</script>

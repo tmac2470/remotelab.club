@@ -29,7 +29,7 @@ class RigsController < ApplicationController
   end
 
   def r_session
-
+    @ui_json = JSON.parse(@rig.ui_json)
   end
 
   def create
