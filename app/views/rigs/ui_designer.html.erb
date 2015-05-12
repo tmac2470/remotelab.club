@@ -1,6 +1,6 @@
 <%= javascript_tag do %>
 	window.definedWidgets = JSON.parse('<%= raw @defined_widgets.to_json %>');
-  window.uiJSON = JSON.parse('<%= raw @rig.ui_json %>');
+  window.uiJSON = JSON.parse('<%= raw @rig.ui_json.gsub("'", %q(\\\')) %>');
 <% end %>
 
 <div>
@@ -121,8 +121,10 @@
       accept: '.defined-widget',
       drop: function(event, ui) {
         var widgetType = ui.draggable.attr('id');
+        while ($('.widget-in#' + widgetNextIndex).length != 0) {
+          widgetNextIndex++
+        }
         addWidgetToCanvas(widgetType, widgetNextIndex);
-        widgetNextIndex++;
       }
     });
 
@@ -146,8 +148,6 @@
     function rebuildWidgetsFromJson() {
       if (window.uiJSON.length > 0) {
         $.each(window.uiJSON, function() {
-          // gridster.add_widget('<li />', this.size_x, this.size_y, this.col, this.row);
-          console.log(this)
           addWidgetToCanvas(this.type, this.id, this.size_x, this.size_y, this.col, this.row, this.settings);
         });
 
