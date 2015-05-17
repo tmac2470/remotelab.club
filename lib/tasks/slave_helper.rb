@@ -36,7 +36,16 @@ class SlaveHelper
   def self.log_data(rig, slave_address, args)
     p 'log_data', rig, slave_address, args
     slave = rig.slave_modules.find_by(s_addr: slave_address.to_i)
-    slave.slave_datas.create(data: args)
+
+    if slave.analog_reader? or slave.temperature_sensor?
+      args.split(',').each_with_index do |p_data, pin|
+        slave.slave_datas.create(data: p_data, pin: pin)
+      end
+    else
+      slave.slave_datas.create(data: args)
+    end
+
+
   end
 
 end

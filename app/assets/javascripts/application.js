@@ -23,3 +23,20 @@
 
 
 console.log('Khanh is awesome!')
+
+
+function updateChartData(chart, slaveId, pin) {
+  console.log(chart)
+
+  console.log()
+  $.ajax({
+    url: '/api/get_chart_data',
+    data: {slave_id: slaveId, pin: pin},
+    success: function(data) {
+      chart.datasets[0].points.value = data.data;
+      chart.datasets[0].label.value = data.label;
+      chart.update();
+      console.log(chart)
+    }
+  })
+}

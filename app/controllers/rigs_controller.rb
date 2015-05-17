@@ -24,6 +24,17 @@ class RigsController < ApplicationController
   end
 
   def ui_designer
+
+    # remove dead slaves
+
+    @rig.slave_modules.each do |slave|
+      if slave.slave_datas.last == nil
+        slave.delete
+      elsif slave.slave_datas.last.created_at < 20.seconds.ago
+        slave.delete
+      end
+    end
+
     @slave_modules = @rig.slave_modules
     @switchable_slaves = @rig.slave_modules.where(s_type: 0)
     @chartable_slaves = @rig.slave_modules.where.not(s_type: 0)
@@ -47,6 +58,23 @@ class RigsController < ApplicationController
     end
 
     render :text => 'Done'
+  end
+
+  def get_chart_data
+    @slave = SlaveModule.find(params[:slave_id])
+    @pin = params[:pin]
+
+    @time = Time.at(params[:from].to_i / 1000.0)
+
+    @data = @slave.slave_datas.where('pin = ? AND created_at > ?', @pin, @time).pluck(:data, :created_at)
+
+    ret_val = []
+
+    @data.each do |val|
+      ret_val.push({x: val[1].to_f * 1000, y: val[0].to_f})
+    end
+
+    render :json => ret_val
   end
 
   def create

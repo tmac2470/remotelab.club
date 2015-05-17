@@ -79,6 +79,13 @@
             <% end %>
           </select>
 
+					<label for="pin">Slave Port</label>
+          <select name="pin" class="form-control">
+            <% (0..3).to_a.each do |i| %>
+              <option value="<%= i %>"><%= "Port #{i}" %></option>
+            <% end %>
+          </select>
+
           <label for="name">Name</label>
           <input name="name" class="form-control"></input>
 
@@ -87,6 +94,15 @@
 
           <label for="yAxis">Y Axis</label>
           <input name="yAxis" class="form-control"></input>
+
+          <label for="period">Period</label>
+          <input name="period" class="form-control" type="number"></input>
+
+          <label for="interval">Interval</label>
+          <input name="interval" class="form-control" type="number"></input>
+
+          <label for="updateRate">Update Rate</label>
+          <input name="updateRate" class="form-control" type="number"></input>
 
         </form>
       </div>

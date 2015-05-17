@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   post 'mqtt', :to => 'rigs#mqtt_publish', :as => 'mqtt_publish'
 
+  get 'api/get_chart_data', :to => 'rigs#get_chart_data', :as => 'get_chart_data'
+
   root to: 'visitors#index'
   devise_for :users
   resources :users

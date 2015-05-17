@@ -15,7 +15,7 @@
         method: 'post',
         url: '/mqtt',
         data: {
-          'rig_hash': '<%=  @rig.rig_hash %>',
+          'rig_hash': '<%= @rig.rig_hash %>',
           's_address': '<%= SlaveModule.find(widget['settings'].select{|s| s['name'] == 'slaveModule'}.first['value']).s_addr %>',
           's_command': 0,
           's_value': <%= widget['settings'].select{|s| s['name'] == 'pin'}.first['value'] %>

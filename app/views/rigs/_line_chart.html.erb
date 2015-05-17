@@ -1,38 +1,93 @@
 <li class="line-chart-widget" id="<%= widget['id'] %>" data-row="<%= widget['row'] %>" data-col="<%= widget['col'] %>" data-sizex="<%= widget['size_x'] %>" data-sizey="<%= widget['size_y'] %>">
-  <h4><%= widget['settings'].select{|s| s['name'] == 'name'}.first['value'] %></h4>
 
-  <canvas class="line-chart" id="line-chart-<%= widget['id'] %>"></canvas>
+  <div class="chart" id="container-<%= widget['id'] %>" </div>
 
 </li>
 
-
 <script>
-var data = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-      {
-          label: "My First dataset",
-          fillColor: "rgba(220,220,220,0.2)",
-          strokeColor: "rgba(220,220,220,1)",
-          pointColor: "rgba(220,220,220,1)",
-          pointStrokeColor: "#fff",
-          pointHighlightFill: "#fff",
-          pointHighlightStroke: "rgba(220,220,220,1)",
-          data: [65, 59, 80, 81, 56, 55, 40]
-      },
-      {
-          label: "My Second dataset",
-          fillColor: "rgba(151,187,205,0.2)",
-          strokeColor: "rgba(151,187,205,1)",
-          pointColor: "rgba(151,187,205,1)",
-          pointStrokeColor: "#fff",
-          pointHighlightFill: "#fff",
-          pointHighlightStroke: "rgba(151,187,205,1)",
-          data: [28, 48, 40, 19, 86, 27, 90]
-      }
-  ]
-};
+$(function () {
 
-var ctx = document.getElementById("line-chart-<%= widget['id'] %>").getContext("2d");
-var myLineChart = new Chart(ctx).Line(data);
+    var lastUpdated = (new Date()).getTime();
+
+    var pin = <%= widget['settings'].select{|s| s['name'] == 'pin'}.first['value'] %>
+    var slaveModule = <%= widget['settings'].select{|s| s['name'] == 'slaveModule'}.first['value'] %>
+
+    $(document).ready(function () {
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+
+        $('#container-<%= widget['id'] %>').highcharts({
+            chart: {
+                type: 'spline',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10,
+                events: {
+                    load: function () {
+
+                        // set up the updating of the chart each second
+                        var series = this.series[0];
+
+                        setInterval(function () {
+
+
+                          $.ajax({
+                            url: '/api/get_chart_data',
+                            data: {slave_id: slaveModule, pin: pin, from: lastUpdated},
+                            success: function(data) {
+                              for (var i = 0; i < data.length; i++) {
+                                series.addPoint([data[i].x, data[i].y]);
+                              }
+                              lastUpdated = (new Date()).getTime();
+                            }
+                          })
+
+                        }, 1000);
+                    }
+                }
+            },
+            title: {
+                text: '<%= widget['settings'].select{|s| s['name'] == 'name'}.first['value'] %>'
+            },
+            xAxis: {
+                title: {
+                    text: '<%= widget['settings'].select{|s| s['name'] == 'xAxis'}.first['value'] %>'
+                },
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: '<%= widget['settings'].select{|s| s['name'] == 'yAxis'}.first['value'] %>'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'Slave data',
+                data: []
+            }]
+        });
+    });
+});
+
+
 </script>
