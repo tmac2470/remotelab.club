@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   get 'api/get_chart_data', :to => 'rigs#get_chart_data', :as => 'get_chart_data'
 
+  get 'api/get_log_data', :to => 'rigs#get_log_data', :as => 'get_log_data'
+
   root to: 'visitors#index'
   devise_for :users
   resources :users

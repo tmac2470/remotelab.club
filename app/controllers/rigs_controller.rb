@@ -77,6 +77,21 @@ class RigsController < ApplicationController
     render :json => ret_val
   end
 
+  def get_log_data
+    @slave = SlaveModule.find(params[:slave_id])
+    @pin = params[:pin]
+
+    @time = Time.at(params[:from].to_i / 1000.0)
+
+    @data = @slave.slave_datas.where('pin = ? AND created_at > ?', @pin, @time).pluck(:data, :created_at).last
+
+    ret_val = nil
+
+    ret_val = {time: @data[1].strftime('%H:%M:%S'), value: @data[0]} unless @data.nil?
+
+    render :json => ret_val
+  end
+
   def create
     @rig = current_user.rigs.new(rig_params)
     flash[:notice] = 'Rig was successfully created.' if @rig.save
@@ -106,7 +121,9 @@ class RigsController < ApplicationController
       @defined_widgets = {
         "line-chart"=> {title: 'Line chart', image: '/widgets/line-chart.png', form: 'chart-form'},
         "bar-chart"=> {title: 'Bar chart', image: '/widgets/bar-chart.png', form: 'chart-form'},
-        "switch"=> {title: 'Switch', image: '/widgets/switch.png', form: 'switch-form'}
+        "switch"=> {title: 'Switch', image: '/widgets/switch.png', form: 'switch-form'},
+        "data-log"=> {title: 'Data Log', image: '/widgets/data-log.png', form: 'data-log-form'},
+        "value"=> {title: 'Value', image: '/widgets/value.png', form: 'value-form'}
       }
     end
 end

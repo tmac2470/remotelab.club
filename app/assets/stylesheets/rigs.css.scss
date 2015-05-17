@@ -121,3 +121,12 @@ body {
   max-width: 800px;
   height: auto !important;
 }
+
+.data-log {
+  text-align: left;
+  margin-left: 10px;
+  margin-top: 10px;
+  font-weight: normal;
+  overflow-y: scroll !important;
+  height: 90%;
+}

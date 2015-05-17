@@ -105,6 +105,44 @@
           <input name="updateRate" class="form-control" type="number"></input>
 
         </form>
+
+				<form id="data-log-form" style="display: none;">
+          <label for="slaveModule">Slave Module</label>
+          <select name="slaveModule" class="form-control">
+            <% @slave_modules.each do |s| %>
+              <option value="<%= s.id %>"><%= "#{s.s_type.titleize} at address #{s.s_addr}" %></option>
+            <% end %>
+          </select>
+
+					<label for="pin">Slave Port</label>
+          <select name="pin" class="form-control">
+            <% (0..13).to_a.each do |i| %>
+              <option value="<%= i %>"><%= "Port #{i}" %></option>
+            <% end %>
+          </select>
+
+          <label for="name">Name</label>
+          <input name="name" class="form-control"></input>
+        </form>
+
+				<form id="value-form" style="display: none;">
+          <label for="slaveModule">Slave Module</label>
+          <select name="slaveModule" class="form-control">
+            <% @slave_modules.each do |s| %>
+              <option value="<%= s.id %>"><%= "#{s.s_type.titleize} at address #{s.s_addr}" %></option>
+            <% end %>
+          </select>
+
+					<label for="pin">Slave Port</label>
+          <select name="pin" class="form-control">
+            <% (0..13).to_a.each do |i| %>
+              <option value="<%= i %>"><%= "Port #{i}" %></option>
+            <% end %>
+          </select>
+
+          <label for="name">Name</label>
+          <input name="name" class="form-control"></input>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" id="close-settings">Close</button>

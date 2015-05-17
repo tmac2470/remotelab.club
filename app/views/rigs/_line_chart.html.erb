@@ -1,7 +1,5 @@
 <li class="line-chart-widget" id="<%= widget['id'] %>" data-row="<%= widget['row'] %>" data-col="<%= widget['col'] %>" data-sizex="<%= widget['size_x'] %>" data-sizey="<%= widget['size_y'] %>">
-
   <div class="chart" id="container-<%= widget['id'] %>" </div>
-
 </li>
 
 <script>
@@ -31,14 +29,15 @@ $(function () {
                         var series = this.series[0];
 
                         setInterval(function () {
-
-
                           $.ajax({
                             url: '/api/get_chart_data',
                             data: {slave_id: slaveModule, pin: pin, from: lastUpdated},
                             success: function(data) {
                               for (var i = 0; i < data.length; i++) {
-                                series.addPoint([data[i].x, data[i].y]);
+                                if (series.data.length >= 10)
+                                  series.addPoint([data[i].x, data[i].y], true, true);
+                                else
+                                  series.addPoint([data[i].x, data[i].y]);
                               }
                               lastUpdated = (new Date()).getTime();
                             }
