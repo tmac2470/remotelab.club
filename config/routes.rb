@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get 'r/:id', :to => 'rigs#r_session', :as => 'rig_session'
 
+  get 'experiments', :to => 'rigs#experiments', :as => 'experiments'
+
   post 'mqtt', :to => 'rigs#mqtt_publish', :as => 'mqtt_publish'
 
   get 'api/get_chart_data', :to => 'rigs#get_chart_data', :as => 'get_chart_data'

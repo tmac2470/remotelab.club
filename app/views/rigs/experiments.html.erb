@@ -1,0 +1,12 @@
+<div class="container">
+  <h1 class="text-center">Experiments</h1>
+  <hr>
+
+  <% @experiments.each do |experiment| %>
+    <div class="experiment thumbnail col-md-3 text-center">
+      <h3><a href="<%= rig_session_path(experiment.id) %>"><%= experiment.title %></a></h3>
+      <p><small>created by <%= experiment.user.email %></small></p>
+      <p><small><%= experiment.description%></small></p>
+    </div>
+  <% end %>
+</div>

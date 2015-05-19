@@ -21,10 +21,19 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+@font-face {
+  font-family: MANIFESTO;
+  src: url(/MANIFESTO.ttf);
+}
+
+h1 {
+  font-family: MANIFESTO;
+}
+
 body {
   font-size: 14px;
   line-height: 20px;
-  font-family: 'Benton', 'Tahoma', 'Helvetica', 'Arial', sans-serif;
+  font-family: 'OpenSans', 'Tahoma', 'Helvetica', 'Arial', sans-serif;
   color: #1b1b1b;
 }
 

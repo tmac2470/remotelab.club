@@ -42,6 +42,7 @@ class RigsController < ApplicationController
   end
 
   def r_session
+    redirect_to experiments_path, alert: 'This experiment is not available at the moment, please try again later...' if @rig.slave_modules.count == 0
     @ui_json = JSON.parse(@rig.ui_json)
   end
 
@@ -107,6 +108,11 @@ class RigsController < ApplicationController
   def destroy
     @rig.destroy
     respond_with(@rig)
+  end
+
+
+  def experiments
+    @experiments = Rig.where(published: true)
   end
 
   private
