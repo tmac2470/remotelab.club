@@ -1,6 +1,9 @@
 <%# add navigation links to this file %>
-<li><%= link_to 'About', page_path('about') %></li>
+
 <% if user_signed_in? %>
+  <li><%= link_to 'My Rigs', rigs_path %></li>
+  <li><%= link_to 'Experiments', page_path('about') %></li>
 <% end %>
+<li><%= link_to 'About', page_path('about') %></li>
 
 

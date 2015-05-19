@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150513001515) do
+ActiveRecord::Schema.define(version: 20150519133316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,9 @@ ActiveRecord::Schema.define(version: 20150513001515) do
     t.datetime "updated_at"
     t.text     "ui_json"
     t.string   "rig_hash"
+    t.boolean  "synced",      default: false
+    t.boolean  "published",   default: false
+    t.string   "password"
   end
 
   create_table "slave_data", force: true do |t|

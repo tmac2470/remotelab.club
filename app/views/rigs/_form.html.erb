@@ -3,12 +3,16 @@
 
   <div class="form-inputs">
     <%= f.input :title %>
-    <%= f.input :rig_type %>
+    <div class="form-group">
+      <%= f.label :rig_type %>
+      <%= f.select(:rig_type, Rig.rig_types.keys.map {|type| [type.titleize,type]}, {}, class: 'form-control') %>
+    </div>
     <%= f.input :description %>
-    <%= f.input :pdf_file %>
+
+    <%= f.input :password %>
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit %>
+    <%= f.button :submit, class: 'btn btn-primary' %>
   </div>
 <% end %>

@@ -12,12 +12,13 @@ class RigsController < ApplicationController
   end
 
   def show
+    @slave = @rig.slave_modules
     respond_with(@rig)
   end
 
   def new
-    @rig = Rig.new
-    respond_with(@rig)
+    @pending_rigs = Rig.where(synced: false)
+    respond_with(@pending_rigs)
   end
 
   def edit
@@ -114,7 +115,7 @@ class RigsController < ApplicationController
     end
 
     def rig_params
-      params.require(:rig).permit(:title, :rig_type, :description, :pdf_file, :ui_json)
+      params.require(:rig).permit(:title, :rig_type, :description, :pdf_file, :ui_json, :password)
     end
 
     def defined_widgets
