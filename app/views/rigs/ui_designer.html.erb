@@ -1,6 +1,8 @@
 <%= javascript_tag do %>
 	window.definedWidgets = JSON.parse('<%= raw @defined_widgets.to_json %>');
-  window.uiJSON = JSON.parse('<%= raw @rig.ui_json.gsub("'", %q(\\\')) %>');
+  <% unless @rig.ui_json.nil? %>
+    window.uiJSON = JSON.parse('<%= raw @rig.ui_json.gsub("'", %q(\\\')) %>');
+  <% end %>
 <% end %>
 
 <div>
