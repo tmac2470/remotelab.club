@@ -42,7 +42,7 @@
     <tbody>
       <% @slave.each do |slave| %>
       <tr>
-        <td><%= slave.s_address %></td>
+        <td><%= slave.s_addr %></td>
         <td><%= slave.s_type.titleize %></td>
         <td><%= slave.created_at %></td>
       </tr>
