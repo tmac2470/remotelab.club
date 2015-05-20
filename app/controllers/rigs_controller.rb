@@ -12,6 +12,16 @@ class RigsController < ApplicationController
   end
 
   def show
+
+    # remove dead slaves
+    @rig.slave_modules.each do |slave|
+      if slave.slave_datas.last == nil
+        slave.delete
+      elsif slave.slave_datas.last.created_at < 15.seconds.ago
+        slave.delete
+      end
+    end
+
     @slave = @rig.slave_modules
     respond_with(@rig)
   end
@@ -27,7 +37,6 @@ class RigsController < ApplicationController
   def ui_designer
 
     # remove dead slaves
-
     @rig.slave_modules.each do |slave|
       if slave.slave_datas.last == nil
         slave.delete
