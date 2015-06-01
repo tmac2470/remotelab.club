@@ -24,6 +24,7 @@ gem 'em-websocket'
 
 gem 'jquery-ui-rails'
 gem 'chart-js-rails'
+gem 'bootstrap-slider-rails'
 
 # MQTT
 gem 'mqtt', :git => 'https://github.com/njh/ruby-mqtt.git'

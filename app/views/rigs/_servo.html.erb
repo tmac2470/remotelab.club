@@ -1,0 +1,24 @@
+<li class="servo-widget" id="<%= widget['id'] %>" data-row="<%= widget['row'] %>" data-col="<%= widget['col'] %>" data-sizex="<%= widget['size_x'] %>" data-sizey="<%= widget['size_y'] %>">
+
+  <input type="text" class="slider" data-value="0" data-slider-min="0" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="horizontal" data-slider-selection="after"data-slider-tooltip="show">
+
+  <h4><%= widget['settings'].select{|s| s['name'] == 'name'}.first['value'] %></h4>
+</li>
+
+<script>
+  $('.slider').slider().on('slideStop', function(ev){
+    var pos = ev.value;
+
+    $.ajax({
+      method: 'post',
+      url: '/mqtt',
+      data: {
+        'rig_hash': '<%= @rig.rig_hash %>',
+        's_address': '<%= SlaveModule.find(widget['settings'].select{|s| s['name'] == 'slaveModule'}.first['value']).s_addr %>',
+        's_command': 0,
+        's_value': pos
+      }
+    })
+
+  });
+</script>
