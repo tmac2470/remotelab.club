@@ -147,6 +147,18 @@
           <label for="name">Name</label>
           <input name="name" class="form-control"></input>
         </form>
+
+        <form id="motor-form" style="display: none;">
+          <label for="slaveModule">Slave Module</label>
+          <select name="slaveModule" class="form-control">
+            <% @motor_slaves.each do |s| %>
+              <option value="<%= s.id %>"><%= "#{s.s_type.titleize} at address #{s.s_addr}" %></option>
+            <% end %>
+          </select>
+
+          <label for="name">Name</label>
+          <input name="name" class="form-control"></input>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" id="close-settings">Close</button>

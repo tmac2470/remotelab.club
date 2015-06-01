@@ -48,6 +48,7 @@ class RigsController < ApplicationController
     @slave_modules = @rig.slave_modules
     @switchable_slaves = @rig.slave_modules.where(s_type: 0)
     @chartable_slaves = @rig.slave_modules.where.not(s_type: 0)
+    @motor_slaves = @rig.slave_modules.where.not(s_type: 3)
   end
 
   def r_session
@@ -139,7 +140,8 @@ class RigsController < ApplicationController
         "bar-chart"=> {title: 'Bar chart', image: '/widgets/bar-chart.png', form: 'chart-form'},
         "switch"=> {title: 'Switch', image: '/widgets/switch.png', form: 'switch-form'},
         "data-log"=> {title: 'Data Log', image: '/widgets/data-log.png', form: 'data-log-form'},
-        "value"=> {title: 'Value', image: '/widgets/value.png', form: 'value-form'}
+        "value"=> {title: 'Value', image: '/widgets/value.png', form: 'value-form'},
+        "motor"=> {title: 'Motor', image: '/widgets/motor.png', form: 'motor-form'}
       }
     end
 end
