@@ -48,7 +48,7 @@ class RigsController < ApplicationController
     @slave_modules = @rig.slave_modules
     @switchable_slaves = @rig.slave_modules.where(s_type: 0)
     @chartable_slaves = @rig.slave_modules.where.not(s_type: 0)
-    @motor_slaves = @rig.slave_modules.where.not(s_type: 3)
+    @motor_slaves = @rig.slave_modules.where(s_type: 3)
   end
 
   def r_session
