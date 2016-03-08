@@ -1,0 +1,33 @@
+  <%= form_for @laboratory do |f| %>
+	<h2>Laboratory Details</h2>
+  
+    <%= f.label "Enter laboratory name: " %>
+	<%= f.text_field :title %>
+	<br>
+    <%= f.label "Enter laboratory type:  " %>
+	<%= f.text_field :laboratory_type %>
+
+  
+	<h2>Available Things</h2>
+	
+	Select the Things to add to the laboratory:
+	<br>
+    <%= f.collection_check_boxes(:thing_ids, Thing.where(status: "registered"), :id, :thing_hash) do |b| %>
+		<div class="row">
+			<%= b.label(class: "check_box") do %>
+				<div class="col-xs-4">
+					<%= b.check_box(class: "check_box") %>
+				</div>
+
+				<div class="col-xs-8">
+					<%= b.object.thing_hash %>
+				</div>       
+			<% end %>
+		</div>	
+  	<% end %>
+  
+	<div class="form-actions">
+		<%= f.button :submit, class: 'btn btn-primary' %>
+	</div>
+  
+  <% end %>

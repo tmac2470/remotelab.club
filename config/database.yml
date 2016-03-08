@@ -18,8 +18,8 @@ development:
   encoding: unicode
   database: remotelab_club_development
   pool:     5
-  username: remotelab_club
-  password:
+  username: test_remote
+  password: test
   template: template0
 
   # Connect on a TCP socket. Omitted by default since the client uses a
@@ -47,7 +47,7 @@ test:
   database: remotelab_club_test
   pool:     5
   username: remotelab_club
-  password:
+  password: remote
   template: template0
 
 production:
@@ -57,5 +57,5 @@ production:
   database: remotelab_club_production
   pool:     5
   username: remotelab_club
-  password:
+  password: remote
   template: template0

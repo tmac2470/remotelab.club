@@ -1,7 +1,8 @@
 <%# add navigation links to this file %>
 
 <% if user_signed_in? %>
-  <li><%= link_to 'My Rigs', rigs_path %></li>
+  <li><%= link_to 'My Laboratories', laboratories_path %></li>
+  <li><%= link_to 'Existing Gateways', gateways_path%></li>
   <li><%= link_to 'Experiments', experiments_path %></li>
 <% end %>
 <li><%= link_to 'About', page_path('about') %></li>

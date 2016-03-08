@@ -23,26 +23,26 @@ begin
             data = JSON.parse(msg)
 
             # from master (yun)
-            if data['from'] == 'gateway'
+            if data['from'] == 'rig'
               if data['command'] == 'register'
-                puts 'Registering gateway'
-                ws.send('Registering gateway...')
-              elsif data['command'] == 'addThing'
-                puts 'adding thing'
-                gateway = Gateway.find_by(gateway_hash: data['gateway_hash'])
-                if gateway
-                  gateway.things.create(thing_addr: data['address'], thing_type: data['value'])
+                puts 'Registering rig'
+                ws.send('Registering rig...')
+              elsif data['command'] == 'addSlave'
+                puts 'adding slave'
+                rig = Rig.find_by(rig_hash: data['rig_hash'])
+                if rig
+                  rig.slave_modules.create(s_addr: data['address'], s_type: data['value'])
                 else
-                  puts 'failed to find gateway'
+                  puts 'failed to find rig'
                 end
               elsif data['command'] == 'logData'
-                gateway = Gateway.find_by(gateway_hash: data['gateway_hash'])
-                if gateway
-                  gateway.things.find_by(thing_addr: data['address']) do |thing|
-                    thing.thing_datas.create(data: data['value'])
+                rig = Rig.find_by(rig_hash: data['rig_hash'])
+                if rig
+                  rig.slave_modules.find_by(s_addr: data['address']) do |slave|
+                    slave.slave_datas.create(data: data['value'])
                   end
                 else
-                  puts 'failed to find gateway'
+                  puts 'failed to find rig'
                 end
               end
             end

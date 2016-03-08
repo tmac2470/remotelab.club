@@ -11,10 +11,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519133316) do
+ActiveRecord::Schema.define(version: 20160307041348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "gateways", force: true do |t|
+    t.boolean  "synched"
+    t.string   "password"
+    t.string   "timestamp"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "gateway_hash"
+    t.string   "status"
+  end
+
+  create_table "laboratories", force: true do |t|
+    t.string   "title"
+    t.integer  "laboratory_type"
+    t.integer  "user_id"
+    t.text     "description"
+    t.string   "pdf_file"
+    t.text     "ui_json"
+    t.string   "laboratory_hash"
+    t.boolean  "published"
+    t.string   "default"
+    t.string   "false"
+    t.string   "password"
+    t.string   "timestamp"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "laboratories_things", id: false, force: true do |t|
+    t.integer "laboratory_id", null: false
+    t.integer "thing_id",      null: false
+  end
 
   create_table "rigs", force: true do |t|
     t.string   "title"
@@ -53,6 +85,35 @@ ActiveRecord::Schema.define(version: 20150519133316) do
     t.boolean  "enabled"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "thing_data", force: true do |t|
+    t.integer  "thing_id"
+    t.text     "data"
+    t.string   "timestamp"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "thing_widgets", force: true do |t|
+    t.integer  "gateway_id"
+    t.text     "settings"
+    t.boolean  "enabled"
+    t.string   "timestamp"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "things", force: true do |t|
+    t.integer  "gateway_id"
+    t.integer  "thing_type"
+    t.integer  "thing_addr"
+    t.string   "timestamp"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "laboratory_id"
+    t.string   "status"
+    t.string   "thing_hash"
   end
 
   create_table "users", force: true do |t|
