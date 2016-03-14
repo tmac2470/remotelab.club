@@ -1,6 +1,6 @@
 class GatewaysController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_gateway, only: [:show, :edit, :update, :destroy, :ui_designer, :l_session]
+  before_action :set_gateway, only: [:show, :edit, :update, :destroy, :ui_designer]
 
   respond_to :html
   
@@ -33,6 +33,21 @@ class GatewaysController < ApplicationController
     render :text => 'Done'
   end
   
+  def show
+
+    # remove dead slaves
+    #@rig.slave_modules.each do |slave|
+     # if slave.slave_datas.last == nil
+      #  slave.delete
+      #elsif slave.slave_datas.last.created_at < 15.seconds.ago
+      #  slave.delete
+      #end
+    #end
+
+    #@slave = @rig.slave_modules
+    @gateways = Gateway.find_each
+    respond_with(@gateway)
+  end
   
   def create
     @gateway = current_user.gateways.new(gateways_params)

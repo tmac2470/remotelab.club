@@ -12,10 +12,14 @@
     <label>Status:</label>
     <% if @laboratory.published %>
       Published
-      <small><a>Unpublish</a></small>
+	<div class="buttons">
+		<%= button_to 'Unpublish', published_laboratory_path(@laboratory, :published => false), :method => :put  %>
+		</div>
     <% else %>
       Private
-      <small><a>Publish</a></small>
+		<div class="buttons">
+		<%= button_to 'Publish', published_laboratory_path(@laboratory.id, :published => true), :method => :put %>
+		</div>
     <% end %>
   </p>
 

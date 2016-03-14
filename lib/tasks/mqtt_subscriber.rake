@@ -21,8 +21,8 @@ begin
 			
             # parse the json dump
             data = JSON.parse(message)
-			p ident
-			p command
+			#p ident
+			#p command
 			
             case ident
 				when "gateways"

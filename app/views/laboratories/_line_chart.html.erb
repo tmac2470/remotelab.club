@@ -1,0 +1,122 @@
+<li class="line-chart-widget" id="<%= widget['id'] %>" data-row="<%= widget['row'] %>" data-col="<%= widget['col'] %>" data-sizex="<%= widget['size_x'] %>" data-sizey="<%= widget['size_y'] %>">
+  <div class="chart" id="container-<%= widget['id'] %>" </div>
+</li>
+
+<script>
+$(function () {
+
+    var lastUpdated = (new Date()).getTime();
+	
+	var thing_topic = "<%= widget['settings'].select{|s| s['name'] == 'thing_topic'}.first['value'] %>";
+	var thing_topic_split = thing_topic.split("_");
+
+    var thing_id = thing_topic_split[0];
+    var thing_log_id = thing_topic_split[1];
+
+    $(document).ready(function () {
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+
+        $('#container-<%= widget['id'] %>').highcharts({
+            chart: {
+                type: 'spline',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10,
+                events: {
+                    load: function () {
+
+                        //set up the updating of the chart each second
+                        var series = this.series;
+						
+                        setInterval(function () {
+                          $.ajax({
+                            url: '/api/get_chart_data',
+                            data: {thing_id: thing_id, thing_log_id: thing_log_id, from: lastUpdated},
+                            success: function(data) {
+								//for (var i = 0; i < data.length; i++) 
+								//{
+									var x,y,name;
+									var i=0;
+									for (var key in data[0]) {
+										x = new Date(data[0].updated);
+										if (key != "updated")
+										{
+											y = data[0][key];
+											name = key;
+											console.log(name, y, i );
+									
+											if (series[i].data.length >= 10)
+												series[i].addPoint([x.getTime(), y], true, true);
+											else
+												series[i].addPoint([x.getTime(), y], true, false);
+										}
+										i++;
+									}	
+								//}
+                              lastUpdated = (new Date()).getTime();
+                            }
+                          })
+
+                        }, 1000);
+                    }
+                }
+            },
+            title: {
+                text: '<%= widget['settings'].select{|s| s['name'] == 'name'}.first['value'] %>'
+            },
+            xAxis: {
+                title: {
+                    text: '<%= widget['settings'].select{|s| s['name'] == 'xAxis'}.first['value'] %>'
+               
+			   },
+                type: 'datetime',
+                tickPixelInterval: 150,
+				labels: {
+					formatter: function(){
+						var thedate=Highcharts.dateFormat('%b %e %H:%M', this.value);
+                    return thedate;
+					}
+				}
+            },
+            yAxis: {
+                title: {
+                    text: '<%= widget['settings'].select{|s| s['name'] == 'yAxis'}.first['value'] %>'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'Series 0',
+                data: []
+				}, {
+				name: 'Series 1',
+				data: []
+				}, {
+				name: 'Series 2',
+				data: []
+				}]
+        });
+    });
+});
+
+
+</script>

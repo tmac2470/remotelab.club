@@ -2,7 +2,7 @@ require 'json'
 class ThingHelper
 ### NOT UPDATED SENSIBLY
 
-  def self.execute_command(command, json_data)
+  def self.execute_command(command, topic_path, json_data)
     p command
     p json_data
 		
@@ -11,6 +11,9 @@ class ThingHelper
 	    register(json_data['thing_hash'],json_data['gateway_hash'] )
 	when "status"
 		get_status(json_data['thing_hash'])
+	when "log" 
+		# Send thing_hash, topic and the data
+		log_data(topic_path[2], topic_path[3],json_data)
     end
 
   end
@@ -21,8 +24,9 @@ class ThingHelper
     p thing_hash
     p gateway_hash
 	
+	# Hardcoded thing type - this must change
 	gw = Gateway.find_by(gateway_hash: gateway_hash)
-	thing = gw.things.create_with(password: thing_hash, status: "registered").find_or_create_by(thing_hash: thing_hash)
+	thing = gw.things.create_with(password: thing_hash, status: "registered", thing_type: "1").find_or_create_by(thing_hash: thing_hash)
 	thing.save
 
 	topic = "things/status"
@@ -48,4 +52,22 @@ class ThingHelper
     p thing_hash
   end
 
+  def self.log_data(thing_hash, topic, args)
+	thing = Thing.find_by(thing_hash: thing_hash)
+    thing_log = thing.thing_logs.find_or_create_by(topic: topic)
+	p thing_log.id
+	
+	thing_log.update(data: args)
+	thing_log.touch
+	thing_log.save
+	
+    # thing.temperature_sensor?
+    #  args.split(',').each_with_index do |p_data, pin|
+    #    thing.thing_logs.create(data: p_data, pin: pin)
+    #  end
+    #else
+    #  slave.slave_datas.create(data: args)
+    #end
+
+  end
 end

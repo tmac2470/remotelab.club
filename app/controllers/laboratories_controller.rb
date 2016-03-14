@@ -1,7 +1,7 @@
 require 'mqtt'
 class LaboratoriesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_laboratory, only: [:show, :edit, :update, :destroy, :ui_designer, :l_session]
+  before_action :set_laboratory, only: [:show, :edit, :update, :destroy, :ui_designer, :l_session, :published]
   before_action :defined_widgets, only: [:ui_designer, :l_session]
 
   respond_to :html
@@ -19,7 +19,6 @@ class LaboratoriesController < ApplicationController
   
   def new
     @available_things = Thing.where(status: "registered")
-    #@available_things = Thing.where(status: "registered").map{|t| [ t.thing_hash, t.gateway_id ] }
     @laboratory = Laboratory.new
     respond_with(@laboratory, @available_things)
   end 
@@ -28,21 +27,23 @@ class LaboratoriesController < ApplicationController
   end
   
   def ui_designer
-
-    # remove dead things
-    #@laboratories.things.each do |thing|
-    #  if thing.thing_datas.last == nil
+    
+	# remove dead things
+    #@laboratory.things.each do |thing|
+    #  if thing.thing_logs.last == nil
     #    thing.delete
-    #  elsif thing.thing_datas.last.created_at < 15.seconds.ago
+    #  elsif thing.thing_logs.last.created_at < 15.seconds.ago
     #    thing.delete
     #  end
     #end
-
-    @things = @laboratory.things
-    @switchable_things = @laboratory.things.where(thing_type: 0)
-    @chartable_things = @laboratory.things.where.not(thing_type: 0)
-    @motor_things = @laboratory.things.where(thing_type: 3)
-    @servo_things = @laboratory.things.where(thing_type: 4)
+	
+    #@things = @laboratory.things
+    #@switchable_things = @laboratory.things.where(thing_type: 0)
+	#@servo_things = @laboratory.things.where(thing_type: 2)
+	#@motor_things = @laboratory.things.where(thing_type: 3)
+    
+	@chartable_things = @laboratory.things.where.not(thing_type: 0).includes(:thing_logs)
+	@chartable_logs = @laboratory.thing_logs.includes(:thing).where("thing_type != ?",0)
   end
   
   
@@ -52,37 +53,38 @@ class LaboratoriesController < ApplicationController
   end
   
   # This must be changed or not done for laboratories - only gateways!  To be #confirmed
-  #def mqtt_publish
+  def mqtt_publish
 
-  #  laboratory_hash = params[:laboratory_hash]
-  #  thing_address = params[:thing_address]
-  #  command = params[:thing_command]
-  #  message = params[:thing_value]
+    laboratory_hash = params[:laboratory_hash]
+    thing_address = params[:thing_address]
+    command = params[:thing_command]
+    message = params[:thing_value]
 
-  #	topic = "laboratories/#{laboratory_hash}/things/#{thing_address}/#{command}"
+  	topic = "laboratories/#{laboratory_hash}/things/#{thing_address}/#{command}"
 
-  #  MQTT::Client.connect('localhost') do |c|
-  #    c.publish(topic, message)
-  #  end
+    MQTT::Client.connect('localhost') do |c|
+      c.publish(topic, message)
+    end
 
-  #  render :text => 'Done'
-  #end
+    render :text => 'Done'
+  end
   
   def get_chart_data
     @thing = Thing.find(params[:thing_id])
-    @pin = params[:pin]
+	@thing_log = params[:thing_log_id]
 
     @time = Time.at(params[:from].to_i / 1000.0)
 
-    @data = @thing.thing_datas.where('pin = ? AND created_at > ?', @pin, @time).pluck(:data, :created_at)
+    @data = @thing.thing_logs.where('id = ? AND updated_at > ?', @thing_log, @time).pluck(:data)
 
-    ret_val = []
+    #@data.each do |val|
+	#	puts val
+	#	ret_val.push({x: val[1].to_f * 1000, y: val[0].to_f})
+    #end
 
-    @data.each do |val|
-      ret_val.push({x: val[1].to_f * 1000, y: val[0].to_f})
-    end
-
-    render :json => ret_val
+	puts @data
+    #render :json => ret_val
+	render :json => @data
   end
 
   def get_log_data
@@ -91,7 +93,7 @@ class LaboratoriesController < ApplicationController
 
     @time = Time.at(params[:from].to_i / 1000.0)
 
-    @data = @thing.thing_datas.where('pin = ? AND created_at > ?', @pin, @time).pluck(:data, :created_at).last
+    @data = @thing.thing_logs.where('pin = ? AND created_at > ?', @pin, @time).pluck(:data, :created_at).last
 
     ret_val = nil
 
@@ -99,6 +101,7 @@ class LaboratoriesController < ApplicationController
 
     render :json => ret_val
   end
+  
   
   def create
     @laboratory = current_user.laboratories.new(laboratory_params)
@@ -120,26 +123,30 @@ class LaboratoriesController < ApplicationController
     @experiments = Laboratory.where(published: true)
   end  
   
-  
-  
+  def published
+	@laboratory = Laboratory.find(params[:id])
+    flash[:notice] = 'Laboratory was successfully published.' if @laboratory.update(:published => params[:published])
+    respond_with(@laboratory)
+  end
+	
   private
     def set_laboratory
-      @laboratory = Laboratory.find(params[:id])
+      @laboratory = Laboratory.includes(:thing_logs).find(params[:id])
     end
 	
 	def laboratory_params
-      params.require(:laboratory).permit(:title, :laboratory_type, :description, :pdf_file, :ui_json, :password, :thing_ids => [])
+      params.require(:laboratory).permit(:title, :laboratory_type, :description, :pdf_file, :ui_json, :password, :published, :thing_ids => [])
     end
 	
 	def defined_widgets
       @defined_widgets = {
         "line-chart"=> {title: 'Line chart', image: '/widgets/line-chart.png', form: 'chart-form'},
-        "bar-chart"=> {title: 'Bar chart', image: '/widgets/bar-chart.png', form: 'chart-form'},
-        "switch"=> {title: 'Switch', image: '/widgets/switch.png', form: 'switch-form'},
-        "data-log"=> {title: 'Data Log', image: '/widgets/data-log.png', form: 'data-log-form'},
-        "value"=> {title: 'Value', image: '/widgets/value.png', form: 'value-form'},
-        "motor"=> {title: 'Motor', image: '/widgets/motor.png', form: 'motor-form'},
-        "servo"=> {title: 'Servo', image: '/widgets/servo.png', form: 'servo-form'}
+        #"bar-chart"=> {title: 'Bar chart', image: '/widgets/bar-chart.png', #form: 'chart-form'},
+        #"switch"=> {title: 'Switch', image: '/widgets/switch.png', form: #'switch-form'},
+        #"data-log"=> {title: 'Data Log', image: '/widgets/data-log.png', form: #'data-log-form'},
+        #"value"=> {title: 'Value', image: '/widgets/value.png', form: #'value-form'},
+        #"motor"=> {title: 'Motor', image: '/widgets/motor.png', form: #'motor-form'},
+        #"servo"=> {title: 'Servo', image: '/widgets/servo.png', form: #'servo-form'}
       }
     end
 

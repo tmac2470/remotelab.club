@@ -1,0 +1,52 @@
+<div class="container">
+  <h1>
+    <%= @rig.title %>
+    <small>(<%= @rig.rig_type.titleize %>)</small>
+  </h1>
+  <p>
+    <label>Description:</label>
+    <%= @rig.description %>
+  </p>
+
+  <p>
+    <label>Status:</label>
+    <% if @rig.published %>
+      Published
+      <small><a>Unpublish</a></small>
+    <% else %>
+      Private
+      <small><a>Publish</a></small>
+    <% end %>
+  </p>
+
+  <p>
+    <label>Password Protected:</label>
+    <%= @rig.password.present?.to_s.titleize %>
+  </p>
+
+  <hr>
+  <div class="buttons">
+    <%= link_to 'Configure', edit_rig_path(@rig), class: 'btn btn-primary btn-lg' %>
+    <%= link_to 'UI Designer', ui_designer_path(@rig), class: 'btn btn-warning btn-lg' %>
+  </div>
+  <hr>
+
+
+  <h2>Slave Modules</h2>
+  <table class="table">
+    <thead>
+      <th>Address</th>
+      <th>Type</th>
+      <th>Connected At</th>
+    </thead>
+    <tbody>
+      <% @slave.each do |slave| %>
+      <tr>
+        <td><%= slave.s_addr %></td>
+        <td><%= slave.s_type.titleize %></td>
+        <td><%= slave.created_at %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

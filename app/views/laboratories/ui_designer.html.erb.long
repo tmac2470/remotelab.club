@@ -47,6 +47,8 @@
 </div>
 
 </div>
+
+<%= form_tag do %>
 	<div class="modal fade" id="settings-modal" tabindex="-1" role="dialog" aria-labelledby="settings-modal" aria-hidden="true">
 	  <div class="modal-dialog">
 		<div class="modal-content">
@@ -56,16 +58,41 @@
 		  </div>
 		  <div class="modal-body">
 		  
-
-			 <form id="chart-form" style="display: none;">
-
-			  <label for="thing_topic">Thing</label>
-			  <select name="thing_topic" class="form-control">
-				<% @chartable_logs.each do |t| %>
-				  <option value="<%= t.thing_id %>_<%= t.id %>"><%= "Topic #{t.topic} on Thing  #{t.thing_id}" %></option>
+			<form id="switch-form" style="display: none;">
+			  <label for="thing">Thing</label>
+			  <select name="thing" class="form-control">
+				<% @switchable_things.each do |s| %>
+				  <option value="<%= s.id %>"><%= "#{s.thing_type} at address #{s.thing_addr}" %></option>
 				<% end %>
 			  </select>
-			  
+
+			  <label for="topic">Thing Topic</label>
+			  <select name="topic" class="form-control">
+				<% (0..3).to_a.each do |i| %>
+				  <option value="<%= i %>"><%= "Port #{i}" %></option>
+				<% end %>
+			  </select>
+
+			  <label for="name">Name</label>
+			  <input name="name" class="form-control"></input>
+			</form>
+
+			
+			<form id="chart-form" style="display: none;">
+			  <label for="thing">Thing</label>
+			  <select name="thing" class="form-control">
+				<% @chartable_things.each do |t| %>
+				  <option value="<%= t.id %>"><%= "#{t.thing_hash} on gateway  #{t.gateway_id}" %></option>
+				<% end %>
+			  </select>
+
+			<label for="topic">Thing Topic</label>
+			  <select name="topic" class="form-control">
+				<% @chartable_things.each do |i| %>
+				  <option value="<%= i %>"><%= "Port #{i.id}" %></option>
+				<% end %>
+			  </select>
+
 			  <label for="name">Name</label>
 			  <input name="name" class="form-control"></input>
 
@@ -86,8 +113,68 @@
 
 			</form>
 
-		  </div>
+			<form id="data-log-form" style="display: none;">
+			  <label for="thing">thing Module</label>
+			  <select name="thing" class="form-control">
+				<% @things.each do |s| %>
+				  <option value="<%= s.id %>"><%= "#{s.thing_type} at address #{s.thing_addr}" %></option>
+				<% end %>
+			  </select>
 
+						<label for="pin">thing Port</label>
+			  <select name="pin" class="form-control">
+				<% (0..13).to_a.each do |i| %>
+				  <option value="<%= i %>"><%= "Port #{i}" %></option>
+				<% end %>
+			  </select>
+
+			  <label for="name">Name</label>
+			  <input name="name" class="form-control"></input>
+			</form>
+
+			<form id="value-form" style="display: none;">
+			  <label for="thing">thing Module</label>
+			  <select name="thing" class="form-control">
+				<% @things.each do |s| %>
+				  <option value="<%= s.id %>"><%= "#{s.thing_type} at address #{s.thing_addr}" %></option>
+				<% end %>
+			  </select>
+
+						<label for="pin">thing Port</label>
+			  <select name="pin" class="form-control">
+				<% (0..13).to_a.each do |i| %>
+				  <option value="<%= i %>"><%= "Port #{i}" %></option>
+				<% end %>
+			  </select>
+
+			  <label for="name">Name</label>
+			  <input name="name" class="form-control"></input>
+			</form>
+
+			<form id="motor-form" style="display: none;">
+			  <label for="thing">thing Module</label>
+			  <select name="thing" class="form-control">
+				<% @motor_things.each do |s| %>
+				  <option value="<%= s.id %>"><%= "#{s.thing_type} at address #{s.thing_addr}" %></option>
+				<% end %>
+			  </select>
+
+			  <label for="name">Name</label>
+			  <input name="name" class="form-control"></input>
+			</form>
+
+			<form id="servo-form" style="display: none;">
+			  <label for="thing">thing Module</label>
+			  <select name="thing" class="form-control">
+				<% @servo_things.each do |s| %>
+				  <option value="<%= s.id %>"><%= "#{s.thing_type} at address #{s.thing_addr}" %></option>
+				<% end %>
+			  </select>
+
+			  <label for="name">Name</label>
+			  <input name="name" class="form-control"></input>
+			</form>
+		  </div>
 		  <div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal" id="close-settings">Close</button>
 			<button type="button" class="btn btn-primary" id="save-settings">Save changes</button>
@@ -95,6 +182,8 @@
 		</div>
 	  </div>
 	</div>
+<% end %>
+
 
 <script>
   $(function() {
