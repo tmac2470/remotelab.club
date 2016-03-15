@@ -2,7 +2,14 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-	
+    <%= f.input :thing_name %>
+    <div class="form-group">
+      <%= f.label :thing_name %>
+      <%= f.select(:thing_type, Thing.rig_types.keys.map {|type| [type.titleize,type]}, {}, class: 'form-control') %>
+    </div>
+    <%= f.input :description %>
+
+    <%= f.input :password %>	
   </div>
 
   <div class="form-actions">

@@ -3,17 +3,17 @@
 <h1 class="text-center">Existing Gateways</h1>
 <hr>
 
-  <small>Test output to display Gateways - To be updated with sensible data (Things, name etc).</small>
-  
+ 
 <%= link_to 'Register New Gateway', new_gateway_path, class: 'btn btn-primary' %>
 
 <table class="table">
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Gateway Hash</th>
-      <th>Password</th>
+      <th>Gateway Name</th>
+      <th>Identifier</th>
+      <th>Description</th>
       <th>Status</th>
+      <th>Created</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -21,10 +21,11 @@
   <tbody>
     <% @gateways.each do |gateway| %>
       <tr>
-        <td><%= gateway.id %></td>
+        <td><%= gateway.gateway_name %></td>
         <td><%= gateway.gateway_hash %></td>
-        <td><%= gateway.password %></td>
-        <td><%= gateway.synched ? 'Synched' : 'Not yet Synched' %></td>
+        <td><%= gateway.description %></td>
+        <td><%= gateway.status %></td>
+        <td><%= gateway.created_at.strftime(fmt='%d-%m-%y %H:%M') %></td>
         <td><%= link_to 'Show', gateway %></td>
       </tr>
     <% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308224405) do
+ActiveRecord::Schema.define(version: 20160315000143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,76 +24,26 @@ ActiveRecord::Schema.define(version: 20160308224405) do
     t.datetime "updated_at"
     t.string   "gateway_hash"
     t.string   "status"
+    t.string   "gateway_name"
+    t.string   "description"
   end
 
   create_table "laboratories", force: true do |t|
     t.string   "title"
-    t.integer  "laboratory_type"
     t.integer  "user_id"
     t.text     "description"
     t.string   "pdf_file"
     t.text     "ui_json"
-    t.string   "laboratory_hash"
     t.boolean  "published"
-    t.string   "default"
-    t.string   "false"
-    t.string   "password"
     t.string   "timestamp"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "password",    limit: 1
   end
 
   create_table "laboratories_things", id: false, force: true do |t|
     t.integer "laboratory_id", null: false
     t.integer "thing_id",      null: false
-  end
-
-  create_table "rigs", force: true do |t|
-    t.string   "title"
-    t.integer  "rig_type"
-    t.integer  "user_id"
-    t.text     "description"
-    t.string   "pdf_file"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "ui_json"
-    t.string   "rig_hash"
-    t.boolean  "synced",      default: false
-    t.boolean  "published",   default: false
-    t.string   "password"
-  end
-
-  create_table "slave_data", force: true do |t|
-    t.integer  "slave_module_id"
-    t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "pin"
-  end
-
-  create_table "slave_modules", force: true do |t|
-    t.integer  "rig_id"
-    t.integer  "s_type"
-    t.integer  "s_addr"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "slave_widgets", force: true do |t|
-    t.integer  "rig_id"
-    t.text     "settings"
-    t.boolean  "enabled"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "thing_data", force: true do |t|
-    t.integer  "thing_id"
-    t.json     "data"
-    t.string   "timestamp"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "topic"
   end
 
   create_table "thing_logs", force: true do |t|
@@ -117,13 +67,13 @@ ActiveRecord::Schema.define(version: 20160308224405) do
   create_table "things", force: true do |t|
     t.integer  "gateway_id"
     t.integer  "thing_type"
-    t.integer  "thing_addr"
     t.string   "timestamp"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "laboratory_id"
     t.string   "status"
     t.string   "thing_hash"
+    t.string   "thing_name"
   end
 
   create_table "users", force: true do |t|

@@ -34,8 +34,7 @@ class GatewaysController < ApplicationController
   end
   
   def show
-
-    # remove dead slaves
+	# remove dead slaves
     #@rig.slave_modules.each do |slave|
      # if slave.slave_datas.last == nil
       #  slave.delete
@@ -44,9 +43,8 @@ class GatewaysController < ApplicationController
       #end
     #end
 
-    #@slave = @rig.slave_modules
-    @gateways = Gateway.find_each
-    respond_with(@gateway)
+	@things = @gateway.things
+    respond_with(@things)
   end
   
   def create

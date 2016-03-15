@@ -13,8 +13,9 @@ class LaboratoriesController < ApplicationController
   
   # ??? Not yet sure how this works?
   def show
-    @things = @laboratory.things 
-    respond_with(@things)
+    @thing_logs = @laboratory.thing_logs.includes(:thing) 
+	@things = @laboratory.things
+    respond_with(@thing_logs, @things)
   end
   
   def new
@@ -50,23 +51,6 @@ class LaboratoriesController < ApplicationController
   def l_session
     redirect_to experiments_path, alert: 'This experiment is not available at the moment, please try again later...' if @laboratory.things.count == 0
     @ui_json = JSON.parse(@laboratory.ui_json)
-  end
-  
-  # This must be changed or not done for laboratories - only gateways!  To be #confirmed
-  def mqtt_publish
-
-    laboratory_hash = params[:laboratory_hash]
-    thing_address = params[:thing_address]
-    command = params[:thing_command]
-    message = params[:thing_value]
-
-  	topic = "laboratories/#{laboratory_hash}/things/#{thing_address}/#{command}"
-
-    MQTT::Client.connect('localhost') do |c|
-      c.publish(topic, message)
-    end
-
-    render :text => 'Done'
   end
   
   def get_chart_data

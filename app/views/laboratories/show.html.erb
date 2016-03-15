@@ -1,7 +1,7 @@
 <div class="container">
   <h1>
     <%= @laboratory.title %>
-    <small>(<%= @laboratory.title.titleize %>)</small>
+    <small>( Last updated: <%= @laboratory.updated_at.strftime(fmt='%d-%m-%y %H:%M') %>)</small>
   </h1>
   <p>
     <label>Description:</label>
@@ -12,12 +12,12 @@
     <label>Status:</label>
     <% if @laboratory.published %>
       Published
-	<div class="buttons">
+	<div >
 		<%= button_to 'Unpublish', published_laboratory_path(@laboratory, :published => false), :method => :put  %>
 		</div>
     <% else %>
       Private
-		<div class="buttons">
+		<div>
 		<%= button_to 'Publish', published_laboratory_path(@laboratory.id, :published => true), :method => :put %>
 		</div>
     <% end %>
@@ -36,20 +36,23 @@
   <hr>
 
 
-  <h2>Things</h2>
+  <h2>Things and data available for this laboratory</h2>
   <table class="table">
     <thead>
-      <th>Thing_hash</th>
-      <th>Type</th>
-      <th>Connected At</th>
+      <th>Thing Name</th>
+      <th>Identifier</th>
+      <th>Available Data</th>
     </thead>
     <tbody>
       <% @things.each do |thing| %>
-      <tr>
-        <td><%= thing.thing_hash %></td>
-        <td><%= thing.thing_type %></td>
-        <td><%= thing.created_at %></td>
-      </tr>
+		<tr>
+			<td><%= thing.thing_name %></td>
+			<td><%= thing.thing_hash %></td>
+			<td>
+				<% thing.thing_logs.each do |log| %>
+				<%= log.topic.titleize %>
+			<% end %>
+		</tr>
       <% end %>
     </tbody>
   </table>

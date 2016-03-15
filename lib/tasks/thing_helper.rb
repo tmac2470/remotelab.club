@@ -8,7 +8,7 @@ class ThingHelper
 		
     case command
 	when "register"
-	    register(json_data['thing_hash'],json_data['gateway_hash'] )
+	    register(json_data['thing_hash'],json_data['gateway_hash'], json_data['name'] )
 	when "status"
 		get_status(json_data['thing_hash'])
 	when "log" 
@@ -20,13 +20,13 @@ class ThingHelper
 
   private
 
-  def self.register(thing_hash, gateway_hash)
+  def self.register(thing_hash, gateway_hash, name)
     p thing_hash
     p gateway_hash
 	
 	# Hardcoded thing type - this must change
 	gw = Gateway.find_by(gateway_hash: gateway_hash)
-	thing = gw.things.create_with(password: thing_hash, status: "registered", thing_type: "1").find_or_create_by(thing_hash: thing_hash)
+	thing = gw.things.create_with(password: thing_hash, status: "registered", thing_type: "1", thing_name: name).find_or_create_by(thing_hash: thing_hash)
 	thing.save
 
 	topic = "things/status"

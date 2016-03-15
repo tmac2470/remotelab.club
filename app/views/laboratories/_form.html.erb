@@ -4,23 +4,23 @@
     <%= f.label "Enter laboratory name: " %>
 	<%= f.text_field :title %>
 	<br>
-    <%= f.label "Enter laboratory type:  " %>
-	<%= f.text_field :laboratory_type %>
+    <%= f.label "Enter laboratory description:  " %>
+	<%= f.text_area :description %>
 
   
 	<h2>Available Things</h2>
 	
-	Select the Things to add to the laboratory:
+	Select the Things to add to this laboratory:
 	<br>
     <%= f.collection_check_boxes(:thing_ids, Thing.where(status: "registered"), :id, :thing_hash) do |b| %>
 		<div class="row">
 			<%= b.label(class: "check_box") do %>
-				<div class="col-xs-4">
+				<div class="col-xs-2">
 					<%= b.check_box(class: "check_box") %>
 				</div>
 
-				<div class="col-xs-8">
-					<%= b.object.thing_hash %>
+				<div class="col-xs-10">
+					<%= b.object.thing_name %> (<%= b.object.thing_hash %>)
 				</div>       
 			<% end %>
 		</div>	
