@@ -6,12 +6,9 @@
 $(function () {
 
     var lastUpdated = (new Date()).getTime();
-	
-	var thing_topic = "<%= widget['settings'].select{|s| s['name'] == 'thing_topic'}.first['value'] %>";
-	var thing_topic_split = thing_topic.split("_");
 
-    var thing_id = thing_topic_split[0];
-    var thing_log_id = thing_topic_split[1];
+    var pin = <%= widget['settings'].select{|s| s['name'] == 'pin'}.first['value'] %>
+    var slaveModule = <%= widget['settings'].select{|s| s['name'] == 'slaveModule'}.first['value'] %>
 
     $(document).ready(function () {
         Highcharts.setOptions({
@@ -28,33 +25,20 @@ $(function () {
                 events: {
                     load: function () {
 
-                        //set up the updating of the chart each second
-                        var series = this.series;
-						
+                        // set up the updating of the chart each second
+                        var series = this.series[0];
+
                         setInterval(function () {
                           $.ajax({
                             url: '/api/get_chart_data',
-                            data: {thing_id: thing_id, thing_log_id: thing_log_id, from: lastUpdated},
+                            data: {slave_id: slaveModule, pin: pin, from: lastUpdated},
                             success: function(data) {
-								for (var i = 0; i < data.length; i++) 
-								{
-									var x1,y1,name1;
-									var i=0;
-									for (var key in data[0]) {
-										x1 = new Date(data[0].updated);
-										if (key != "updated")
-										{
-											y1 = data[0][key];
-											name1 = key;
-											//console.log(name1, y1, i );
-											if (series[i].data.length >= 10)
-												series[i].addPoint({x: x1.getTime(), y: y1, name: name1}, true, true);
-											else
-												series[i].addPoint({x:x1.getTime(), y:y1, name: name1}, true, false);
-										}
-										i++;
-									}	
-								}
+                              for (var i = 0; i < data.length; i++) {
+                                if (series.data.length >= 10)
+                                  series.addPoint([x: data[i].x,y: data[i].y, name: key], true, true);
+                                else
+                                  series.addPoint([data[i].x, data[i].y]);
+                              }
                               lastUpdated = (new Date()).getTime();
                             }
                           })
@@ -69,16 +53,9 @@ $(function () {
             xAxis: {
                 title: {
                     text: '<%= widget['settings'].select{|s| s['name'] == 'xAxis'}.first['value'] %>'
-               
-			   },
+                },
                 type: 'datetime',
-                tickPixelInterval: 150,
-				labels: {
-					formatter: function(){
-						var thedate=Highcharts.dateFormat('%b %e %H:%M', this.value);
-                    return thedate;
-					}
-				}
+                tickPixelInterval: 150
             },
             yAxis: {
                 title: {
@@ -92,36 +69,21 @@ $(function () {
             },
             tooltip: {
                 formatter: function () {
-                    return '<b> Value for: ' + this.point.name + '</b><br/>' +
+                    return '<b>' + this.series.data.name + '</b><br/>' +
                         Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
                         Highcharts.numberFormat(this.y, 2);
                 }
             },
             legend: {
-                enabled: true,
-	            labelFormatter: function () 
-					{console.log(this);
-					var i=1;
-					if(i==1){
-						i++;
-                        return 'test';
-                    }
-					return '<span>' + this.userOptions.data[0].name+'</span>';},
-				useHTML:true
-		    },
+                enabled: false
+            },
             exporting: {
                 enabled: false
             },
             series: [{
-                name: 'Series 0',
+                name: 'Slave data',
                 data: []
-				}, {
-				name: 'Series 1',
-				data: []
-				}, {
-				name: 'Series 2',
-				data: []
-				}]
+            }]
         });
     });
 });

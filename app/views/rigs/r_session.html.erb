@@ -1,0 +1,30 @@
+<%= javascript_tag do %>
+	window.definedWidgets = JSON.parse('<%= raw @defined_widgets.to_json %>');
+  window.uiJSON = JSON.parse('<%= raw @rig.ui_json %>');
+<% end %>
+
+
+<!-- render the ui_json and bind the elements to the hardware modules -->
+<div class="col-md-10 col-md-offset-1">
+  <div class="gridster thumbnail" id="canvas">
+    <!-- widgets goes inside the ul -->
+    <ul>
+      <% @ui_json.each do |widget| %>
+      <%= render partial: widget['type'].gsub('-', '_'), locals: {widget: widget} %>
+      <% end %>
+    </ul>
+
+  </div>
+</div>
+
+
+
+<script>
+  $(function() {
+    var gridster = $(".gridster ul").gridster({
+      widget_margins: [10, 10],
+      widget_base_dimensions: [250, 165]
+      // resize: {enabled: true},
+    }).data('gridster').disable();
+  });
+</script>

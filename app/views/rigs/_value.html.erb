@@ -1,0 +1,29 @@
+<li class="value-widget" id="<%= widget['id'] %>" data-row="<%= widget['row'] %>" data-col="<%= widget['col'] %>" data-sizex="<%= widget['size_x'] %>" data-sizey="<%= widget['size_y'] %>">
+  <h4><%= widget['settings'].select{|s| s['name'] == 'name'}.first['value'] %> </h4>
+
+  <h1 id="value-<%= widget['id'] %>">#</h1>
+</li>
+
+<script>
+var lastUpdated = (new Date()).getTime();
+var pin = <%= widget['settings'].select{|s| s['name'] == 'pin'}.first['value'] %>
+var slaveModule = <%= widget['settings'].select{|s| s['name'] == 'slaveModule'}.first['value'] %>
+
+var thisVal = $("#value-<%= widget['id'] %>")
+
+setInterval(function () {
+  $.ajax({
+    url: '/api/get_log_data',
+    data: {slave_id: slaveModule, pin: pin, from: lastUpdated},
+    success: function(data) {
+      if (data != null) {
+        thisVal.html(data.value)
+      }
+
+      lastUpdated = (new Date()).getTime();
+    }
+  })
+
+}, 1000);
+
+</script>

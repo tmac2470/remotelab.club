@@ -1,3 +1,4 @@
 class ThingLog < ActiveRecord::Base
-  belongs_to :thing, inverse_of: :thing_logs
+  belongs_to :thing
+  has_many :laboratories, :through => :things
 end

@@ -1,5 +1,5 @@
 class Thing < ActiveRecord::Base
-  belongs_to :laboratories
+  has_and_belongs_to_many :laboratories
   belongs_to :gateway
   has_many :thing_logs
   accepts_nested_attributes_for :thing_logs

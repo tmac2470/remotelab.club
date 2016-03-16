@@ -62,7 +62,7 @@
 			  <label for="thing_topic">Thing</label>
 			  <select name="thing_topic" class="form-control">
 				<% @chartable_logs.each do |t| %>
-				  <option value="<%= t.thing_id %>_<%= t.id %>"><%= "Topic #{t.topic} on Thing  #{t.thing_id}" %></option>
+				  <option value="<%= t.thing_id %>_<%= t.id %>"><%= "Topic '#{t.topic.titleize}' on Thing '#{t.thing.thing_name}'" %></option>
 				<% end %>
 			  </select>
 			  

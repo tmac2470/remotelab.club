@@ -10,17 +10,7 @@
 
   <p>
     <label>Status:</label>
-    <% if @laboratory.published %>
-      Published
-	<div >
-		<%= button_to 'Unpublish', published_laboratory_path(@laboratory, :published => false), :method => :put  %>
-		</div>
-    <% else %>
-      Private
-		<div>
-		<%= button_to 'Publish', published_laboratory_path(@laboratory.id, :published => true), :method => :put %>
-		</div>
-    <% end %>
+    <%= @laboratory.published ? 'Published' : 'Private' %>
   </p>
 
   <p>
@@ -30,8 +20,13 @@
 
   <hr>
   <div class="buttons">
-    <%= link_to 'Configure', edit_laboratory_path(@laboratory), class: 'btn btn-primary btn-lg' %>
-    <%= link_to 'UI Designer', ui_designer_path(@laboratory), class: 'btn btn-warning btn-lg' %>
+    <%= link_to 'Edit Laboratory', edit_laboratory_path(@laboratory), class: 'btn btn-primary btn-lg' %>
+    <%= link_to 'Design Laboratory UI', ui_designer_path(@laboratory), class: 'btn btn-warning btn-lg' %>
+	<% if @laboratory.published %>
+		<%= link_to 'Unpublish Laboratory', published_laboratory_path(@laboratory.id, :published => false), :method => :put, class: 'btn btn-primary btn-lg' %>
+    <% else %>
+		<%= link_to 'Publish Laboratory', published_laboratory_path(@laboratory.id, :published => true), :method => :put, class: 'btn btn-warning btn-lg' %>
+    <% end %>
   </div>
   <hr>
 
@@ -56,4 +51,6 @@
       <% end %>
     </tbody>
   </table>
+  
+  <%= link_to 'Back', laboratories_path, class: 'btn btn-default' %>
 </div>

@@ -1,6 +1,6 @@
 class ThingsController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_thing, only: [:show, :edit, :update, :destroy, :ui_designer, :l_session]
+  before_action :set_thing, only: [:show, :edit, :update, :destroy, :ui_designer]
 
   respond_to :html
 
@@ -43,6 +43,6 @@ class ThingsController < ApplicationController
     end
 
     def thing_params
-      params[:thing].permit(:thing_type, :thing_addr, :thing_hash, :thing_logs => [])
+      params[:thing].permit(:thing_type, :thing_addr, :thing_hash, :thing_log_ids => [], :laboratory_ids => [])
     end
 end

@@ -1,8 +1,10 @@
-  <%= form_for @laboratory do |f| %>
+  <%= simple_form_for(@laboratory)  do |f| %>
 	<h2>Laboratory Details</h2>
-  
+
+	<%= f.error_notification %>	
+	
     <%= f.label "Enter laboratory name: " %>
-	<%= f.text_field :title %>
+	<%= f.text_field :title,  include_blank: "Choose a laboratory name", required: true %>
 	<br>
     <%= f.label "Enter laboratory description:  " %>
 	<%= f.text_area :description %>

@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
   get 'api/get_log_data', :to => 'rigs#get_log_data', :as => 'get_log_data'
 
-  #get 'laboratory/new', :to => 'laboratories#create', :as => 'laboratory'
+  #get 'laboratory/new', :to => 'laboratories#create', :as => 'create_laboratory'
 
   root to: 'visitors#index'
   devise_for :users

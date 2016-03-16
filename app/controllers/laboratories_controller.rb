@@ -11,7 +11,6 @@ class LaboratoriesController < ApplicationController
     respond_with(@laboratories)
   end
   
-  # ??? Not yet sure how this works?
   def show
     @thing_logs = @laboratory.thing_logs.includes(:thing) 
 	@things = @laboratory.things
@@ -42,9 +41,10 @@ class LaboratoriesController < ApplicationController
     #@switchable_things = @laboratory.things.where(thing_type: 0)
 	#@servo_things = @laboratory.things.where(thing_type: 2)
 	#@motor_things = @laboratory.things.where(thing_type: 3)
-    
-	@chartable_things = @laboratory.things.where.not(thing_type: 0).includes(:thing_logs)
+	#@chartable_things = @laboratory.things.where.not(thing_type: 0).includes(:thing_logs)
+	
 	@chartable_logs = @laboratory.thing_logs.includes(:thing).where("thing_type != ?",0)
+	
   end
   
   
@@ -90,7 +90,8 @@ class LaboratoriesController < ApplicationController
   def create
     @laboratory = current_user.laboratories.new(laboratory_params)
     flash[:notice] = 'Laboratory was successfully created.' if @laboratory.save
-    respond_with(@laboratory)
+	redirect_to laboratory: "show"
+    #respond_with(@laboratory)
   end
   
   def update
@@ -119,7 +120,7 @@ class LaboratoriesController < ApplicationController
     end
 	
 	def laboratory_params
-      params.require(:laboratory).permit(:title, :laboratory_type, :description, :pdf_file, :ui_json, :password, :published, :thing_ids => [])
+      params.require(:laboratory).permit(:title, :description, :pdf_file, :ui_json, :password, :published, :thing_ids => [])
     end
 	
 	def defined_widgets
