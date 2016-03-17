@@ -98,16 +98,7 @@ $(function () {
                 }
             },
             legend: {
-                enabled: true,
-	            labelFormatter: function () 
-					{console.log(this);
-					var i=1;
-					if(i==1){
-						i++;
-                        return 'test';
-                    }
-					return '<span>' + this.userOptions.data[0].name+'</span>';},
-				useHTML:true
+                enabled: false,
 		    },
             exporting: {
                 enabled: false
