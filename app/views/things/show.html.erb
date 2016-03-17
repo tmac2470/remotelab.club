@@ -20,7 +20,7 @@
       <th>Last Updated</th>
     </thead>
     <tbody>
-      <% @thing.thing_logs.topic.distinct.each do |thing_log| %>
+      <% @thing.thing_logs.each do |thing_log| %>
       <tr>
         <td><%= thing_log.topic.titleize %></td>
         <td><%= thing_log.updated_at.strftime(fmt='%d-%m-%y %H:%M') %></td>
