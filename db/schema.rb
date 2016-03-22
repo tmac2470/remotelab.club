@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315000143) do
+ActiveRecord::Schema.define(version: 20160322021512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,8 @@ ActiveRecord::Schema.define(version: 20160315000143) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "thing_logs", ["topic"], name: "index_thing_logs_on_topic", using: :btree
 
   create_table "thing_widgets", force: true do |t|
     t.integer  "gateway_id"

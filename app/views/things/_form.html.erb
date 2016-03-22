@@ -4,15 +4,15 @@
   <div class="form-inputs">
     <%= f.input :thing_name %>
     <div class="form-group">
-      <%= f.label :thing_name %>
-      <%= f.select(:thing_type, Thing.rig_types.keys.map {|type| [type.titleize,type]}, {}, class: 'form-control') %>
+		<%= f.label :thing_type %>
+		<%= f.select(:thing_type, Thing.thing_types.keys.map {|type| [type.titleize,type]}, {}, class: 'form-control') %>
     </div>
-    <%= f.input :description %>
-
-    <%= f.input :password %>	
+    <%= f.input :thing_hash %>
+    <%= f.input :gateway_id %>	
   </div>
 
   <div class="form-actions">
     <%= f.button :submit %>
   </div>
+  
 <% end %>

@@ -44,8 +44,8 @@
 			<td><%= thing.thing_name %></td>
 			<td><%= thing.thing_hash %></td>
 			<td>
-				<% thing.thing_logs.each do |log| %>
-				<%= log.topic.titleize %>
+				<% thing.thing_logs.map(&:topic).uniq.each do |topic| %>
+				<%= topic.titleize %>
 			<% end %>
 		</tr>
       <% end %>

@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
   resources :things
-
   resources :rigs
   resources :laboratories do
 	member do

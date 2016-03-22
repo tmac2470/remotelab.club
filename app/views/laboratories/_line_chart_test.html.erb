@@ -117,5 +117,39 @@ $(function () {
     });
 });
 
+/**
+ * Request data from the server, add it to the graph and set a timeout 
+ * to request again
+ */
+function requestData() {
+    var series = this.series;
+
+	$.ajax({
+		url: '/api/get_chart_data',
+        data: {thing_id: thing_id, thing_log_id: thing_log_id, from: lastUpdated},
+		success: function(data) {
+			for (var i = 0; i < data.length; i++) 
+				{
+					var x1,y1,name1;
+					for (var key in data[0]) {
+						x1 = new Date(data[0].updated);
+						if (key != "updated")
+						{
+							y1 = data[0][key];
+							name1 = key;
+							//console.log(name1, y1, i );
+							shift = series[i].data.length > 20; // shift if the series is 
+																// longer than 20
+							series[i].addPoint({x: x1.getTime(), y: y1, name: name1}, true, shift);
+						}
+					}	
+				}
+            }
+		})
+            setTimeout(requestData, 1000);    
+        },
+        cache: false
+    });
+}
 
 </script>

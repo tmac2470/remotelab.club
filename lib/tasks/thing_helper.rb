@@ -21,8 +21,8 @@ class ThingHelper
   private
 
   def self.register(thing_hash, gateway_hash, name)
-    p thing_hash
-    p gateway_hash
+    #p thing_hash
+    #p gateway_hash
 	
 	# Hardcoded thing type - this must change
 	gw = Gateway.find_by(gateway_hash: gateway_hash)
@@ -45,7 +45,7 @@ class ThingHelper
   def self.get_status(thing_hash)
 	# Does not do anything at this stage - just prints out status
 	status = Thing.select("id", "status").where(thing_hash: thing_hash)
-	p status
+	#p status
   end
 	
   def self.health_update(thing_hash)
@@ -55,12 +55,12 @@ class ThingHelper
   def self.log_data(thing_hash, topic, args)
 	thing = Thing.find_by(thing_hash: thing_hash)
 	
-	thing_log = thing.thing_logs.find_or_create_by(topic: topic)
+	#thing_log = thing.thing_logs.find_or_create_by(topic: topic)
 	#p thing_log.id
-	thing_log.update(data: args)
+	#thing_log.update(data: args)
 
 	# for logging all data - need to change query on showing lab and selecting topics
-	#thing_log = thing.thing_logs.create(topic: topic, data: args, thing_id: thing.id)
+	thing_log = thing.thing_logs.create(topic: topic, data: args, thing_id: thing.id)
 	
 	thing_log.touch
 	thing_log.save

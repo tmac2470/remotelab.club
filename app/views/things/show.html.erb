@@ -13,6 +13,12 @@
     <%= @thing.thing_type == 1 ? 'Chartable Data' : 'Not Chartable Data' %>
   </p>
 
+  <hr>
+  <div class="buttons">
+    <%= link_to 'Edit Thing', edit_thing_path(@thing), class: 'btn btn-primary btn-lg' %>
+  </div>
+  <hr>
+
   <h2>Thing Data Available</h2>
   <table class="table">
     <thead>
