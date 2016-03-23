@@ -10,8 +10,8 @@ class ThingsController < ApplicationController
   end
 
   def show
-  	#@topics = @thing.thing_logs.order("created_at DESC").map(:topic).uniq
-	@topics = Thing.includes(:thing_logs).find_by(id: @thing.id).thing_logs.find_by_sql("select topic, max(updated_at) as latest from thing_logs group by topic")
+  	@topics = @thing.thing_logs.order("created_at DESC").map(&:topic).uniq
+	#@topics = Thing.includes(:thing_logs).find(params[:id]).thing_logs.find_by_sql("select topic, max(updated_at) as latest from thing_logs group by topic")
 	#.uniq(|t| t[:topic])
     respond_with(@thing)
   end
