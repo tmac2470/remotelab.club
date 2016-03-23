@@ -26,10 +26,10 @@
       <th>Last Updated</th>
     </thead>
     <tbody>
-      <% @thing.thing_logs.each do |thing_log| %>
+      <% @topics.each do |t| %>
       <tr>
-        <td><%= thing_log.topic.titleize %></td>
-        <td><%= thing_log.updated_at.strftime(fmt='%d-%m-%y %H:%M') %></td>
+        <td><%= t.topic %></td>
+        <td><%= t.latest %></td>
       </tr>
       <% end %>
     </tbody>

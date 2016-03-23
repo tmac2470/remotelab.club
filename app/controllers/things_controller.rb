@@ -1,7 +1,7 @@
 class ThingsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_thing, only: [:show, :edit, :update, :destroy, :ui_designer]
-
+  
   respond_to :html
 
   def index
@@ -10,6 +10,8 @@ class ThingsController < ApplicationController
   end
 
   def show
+  	#@topics = @thing.thing_logs.order("created_at DESC").map(&:topic)
+	@topics = Thing.find(params[:id]).thing_logs.includes(:thing_logs).find_by_sql("select topic, max(updated_at) as latest from thing_logs group by topic")
     respond_with(@thing)
   end
 
